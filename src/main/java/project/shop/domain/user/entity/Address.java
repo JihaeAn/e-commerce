@@ -1,11 +1,10 @@
-package project.shop.domain.address.entity;
+package project.shop.domain.user.entity;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import project.shop.domain.user.entity.User;
 import project.shop.global.entity.BaseEntity;
 
 @Entity
@@ -42,7 +41,7 @@ public class Address extends BaseEntity {
     private String addressMemo;
 
     @Column(name = "address_type", length = 20)
-    private String addressType;
+    private String addressType; // todo: Enum으로 관리
 
     @Column(name = "address_type_name", length = 30)
     private String addressTypeName;

@@ -33,5 +33,5 @@ public class Item extends BaseEntity {
     private Integer price;
 
     @Column(name = "status")
-    private String status;
+    private String status; // todo: Enum으로 관리
 }

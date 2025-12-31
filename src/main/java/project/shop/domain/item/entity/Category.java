@@ -29,7 +29,7 @@ public class Category extends BaseEntity {
     private int sortOrder;
 
     @Column(name = "status")
-    private String status;
+    private String status; // todo: Enum으로 관리
 
     @OneToMany(mappedBy = "category", fetch = FetchType.LAZY)
     private List<Item> items = new ArrayList<>();
