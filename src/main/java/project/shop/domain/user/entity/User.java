@@ -5,7 +5,8 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import project.shop.domain.address.entity.Address;
+import project.shop.domain.cart.entity.Cart;
+import project.shop.domain.order.entity.Order;
 import project.shop.global.entity.BaseEntity;
 
 import java.time.LocalDate;
@@ -14,9 +15,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-@Getter
 @Entity
 @Table(name = "TB_USER")
+@Getter
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class User extends BaseEntity {
@@ -32,7 +33,7 @@ public class User extends BaseEntity {
     @Column(name = "password", nullable = false)
     private String password;
 
-    @Column(name = "email", nullable = false, length = 100)
+    @Column(name = "email", nullable = false, unique = true, length = 100)
     private String email;
 
     @Column(name = "user_name", length = 50)
@@ -47,6 +48,9 @@ public class User extends BaseEntity {
     @Column(name = "birth_date")
     private LocalDate birthDate;
 
+    @Column(name = "grade")
+    private String grade; // todo: Enum으로 관리
+
     @Column(name = "withdraw_yn", length = 1)
     private Character withdrawYn;
 
@@ -58,6 +62,12 @@ public class User extends BaseEntity {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Address> addresses = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Order> orders = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Cart> carts = new ArrayList<>();
 
 
     public static User createUser() {
