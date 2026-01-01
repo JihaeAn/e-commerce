@@ -1,0 +1,10 @@
+#!/bin/bash
+set -e
+
+mysql -u root -p"$MYSQL_ROOT_PASSWORD" <<EOSQL
+CREATE USER IF NOT EXISTS '$MYSQL_USER'@'localhost'
+  IDENTIFIED BY '$MYSQL_PASSWORD';
+
+GRANT ALL PRIVILEGES ON shop.* TO '$MYSQL_USER'@'localhost';
+
+FLUSH PRIVILEGES;
