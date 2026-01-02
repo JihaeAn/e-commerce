@@ -1,14 +1,18 @@
 package project.shop.domain.user.controller.v1;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
+import project.shop.domain.user.dto.response.UserResponse;
+import project.shop.domain.user.dto.search.UserSearchCondition;
 import project.shop.domain.user.entity.User;
 import project.shop.domain.user.service.UserService;
 
-@Controller
+@RestController
 @RequestMapping("/api/v1/user")
 @RequiredArgsConstructor
 public class UserController {
@@ -19,5 +23,12 @@ public class UserController {
     public ResponseEntity<User> signInUser() {
         userService.saveUser();
         return ResponseEntity.ok().build();
+    }
+
+    // username=kim&ageGoe=20&page=0&size=20&sort=age,desc
+    @GetMapping
+    public Page<UserResponse> getUsers(UserSearchCondition condition,
+                                       @PageableDefault(size = 10, sort = "id", direction = Sort.Direction.ASC) Pageable pageable){
+        return userService.findAllUsers(condition, pageable);
     }
 }

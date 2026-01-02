@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import project.shop.domain.cart.entity.Cart;
 import project.shop.domain.order.entity.Order;
+import project.shop.domain.user.enums.Grade;
 import project.shop.global.entity.BaseEntity;
 
 import java.time.LocalDate;
@@ -49,7 +50,8 @@ public class User extends BaseEntity {
     private LocalDate birthDate;
 
     @Column(name = "grade")
-    private String grade; // todo: Enum으로 관리
+    @Enumerated(value = EnumType.STRING)
+    private Grade grade; // todo: Enum으로 관리
 
     @Column(name = "withdraw_yn", length = 1)
     private Character withdrawYn;
@@ -78,6 +80,19 @@ public class User extends BaseEntity {
         user.userName = "안지해";
         user.withdrawYn = 'N';
 
+        return user;
+    }
+
+    public static User createUser(String loginId, String password, String email, String userName, Grade grade, Character withdrawYn, LocalDateTime withdrawAt, LocalDateTime lastLoginAt){
+        User user = new User();
+        user.loginId = loginId;
+        user.password = password;
+        user.email = email;
+        user.userName = userName;
+        user.grade = grade;
+        user.withdrawYn = 'N';
+        user.withdrawAt = withdrawAt;
+        user.lastLoginAt = lastLoginAt;
         return user;
     }
 }
