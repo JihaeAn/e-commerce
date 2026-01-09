@@ -34,5 +34,6 @@ public class Item extends BaseEntity {
     private Integer price;
 
     @Column(name = "status")
+    @Enumerated(value = EnumType.STRING)
     private Status status;
 }
