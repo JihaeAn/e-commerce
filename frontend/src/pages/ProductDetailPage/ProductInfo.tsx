@@ -3,24 +3,46 @@ import type { Item } from '../../types/item';
 import Button from '../../components/ui/Button';
 import QuantitySelector from '../../components/ui/QuantitySelector';
 import OptionSelector from './OptionSelector';
+import { useCart } from '../../context/CartContext';
 
 interface ProductInfoProps {
   item: Item;
 }
 
 export default function ProductInfo({ item }: ProductInfoProps) {
+  const { addItem } = useCart();
   const [selectedOptions, setSelectedOptions] = useState<Record<string, string>>({});
   const [quantity, setQuantity] = useState(1);
+  const [toast, setToast] = useState(false);
+  const [errors, setErrors] = useState<Record<string, boolean>>({});
 
   const colorGroup = item.optionGroups.find((g) => g.name === 'COLOR');
   const sizeGroup = item.optionGroups.find((g) => g.name === 'SIZE');
 
   const handleSelect = (groupName: string, option: string) => {
     setSelectedOptions((prev) => ({ ...prev, [groupName]: option }));
+    setErrors((prev) => ({ ...prev, [groupName]: false }));
+  };
+
+  const handleAdd = () => {
+    const newErrors: Record<string, boolean> = {};
+    if (colorGroup && !selectedOptions['COLOR']) newErrors['COLOR'] = true;
+    if (sizeGroup && !selectedOptions['SIZE']) newErrors['SIZE'] = true;
+    if (Object.keys(newErrors).length) { setErrors(newErrors); return; }
+
+    addItem({ itemId: item.id, name: item.name, brandName: item.brandName, price: item.price, imageUrl: item.imageUrl, selectedOptions }, quantity);
+    setToast(true);
+    setTimeout(() => setToast(false), 2000);
   };
 
   return (
     <div className="space-y-8">
+      {toast && (
+        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 bg-black text-white text-xs tracking-widest uppercase px-6 py-3 z-50 shadow-lg">
+          장바구니에 담겼습니다
+        </div>
+      )}
+
       <div>
         <p className="text-xs tracking-widest uppercase text-gray-400 mb-2">{item.brandName}</p>
         <h1 className="text-3xl font-bold tracking-tight mb-3">{item.name}</h1>
@@ -30,21 +52,27 @@ export default function ProductInfo({ item }: ProductInfoProps) {
       <p className="text-sm text-gray-600 leading-relaxed">{item.description}</p>
 
       {colorGroup && (
-        <OptionSelector
-          label="Color"
-          options={colorGroup.options}
-          selected={selectedOptions['COLOR'] ?? null}
-          onSelect={(opt) => handleSelect('COLOR', opt)}
-        />
+        <div>
+          <OptionSelector
+            label="Color"
+            options={colorGroup.options}
+            selected={selectedOptions['COLOR'] ?? null}
+            onSelect={(opt) => handleSelect('COLOR', opt)}
+          />
+          {errors['COLOR'] && <p className="mt-1.5 text-xs text-red-500">색상을 선택해주세요.</p>}
+        </div>
       )}
 
       {sizeGroup && (
-        <OptionSelector
-          label="Size"
-          options={sizeGroup.options}
-          selected={selectedOptions['SIZE'] ?? null}
-          onSelect={(opt) => handleSelect('SIZE', opt)}
-        />
+        <div>
+          <OptionSelector
+            label="Size"
+            options={sizeGroup.options}
+            selected={selectedOptions['SIZE'] ?? null}
+            onSelect={(opt) => handleSelect('SIZE', opt)}
+          />
+          {errors['SIZE'] && <p className="mt-1.5 text-xs text-red-500">사이즈를 선택해주세요.</p>}
+        </div>
       )}
 
       <div>
@@ -53,7 +81,7 @@ export default function ProductInfo({ item }: ProductInfoProps) {
       </div>
 
       <div className="space-y-3 pt-2">
-        <Button variant="solid" fullWidth>
+        <Button variant="solid" fullWidth onClick={handleAdd}>
           Add to Bag
         </Button>
         <Button variant="outline" fullWidth>
