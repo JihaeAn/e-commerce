@@ -5,6 +5,7 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import project.shop.domain.item.enums.PolicyType;
 import project.shop.global.entity.BaseEntity;
 
 import java.time.LocalDateTime;
@@ -26,7 +27,8 @@ public class ItemSalePolicy extends BaseEntity {
     private Item item;
 
     @Column(name = "policy_type")
-    private String policyType; // todo: Enum으로 관리
+    @Enumerated(value = EnumType.STRING)
+    private PolicyType policyType;
 
     @Column(name = "sale_price")
     private Integer salePrice;

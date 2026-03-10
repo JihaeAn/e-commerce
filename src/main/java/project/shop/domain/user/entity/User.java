@@ -51,7 +51,7 @@ public class User extends BaseEntity {
 
     @Column(name = "grade")
     @Enumerated(value = EnumType.STRING)
-    private Grade grade; // todo: Enum으로 관리
+    private Grade grade;
 
     @Column(name = "withdraw_yn", length = 1)
     private Character withdrawYn;

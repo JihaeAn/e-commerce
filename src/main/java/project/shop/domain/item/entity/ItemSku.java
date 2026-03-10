@@ -32,6 +32,8 @@ public class ItemSku extends BaseEntity {
     @Column(name = "additional_price")
     private Integer additionalPrice;
 
+    // 재고가 0될 때 같이 업데이트 x
+    // 해당 옵션의 제품을 더이상 팔건지 안 팔건지 판매자가 결정하는 컬럼
     @Column(name = "is_active")
     private String isActive;
 }
