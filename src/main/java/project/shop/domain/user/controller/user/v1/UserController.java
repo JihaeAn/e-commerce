@@ -1,4 +1,4 @@
-package project.shop.domain.user.controller.v1;
+package project.shop.domain.user.controller.user.v1;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;

@@ -5,6 +5,7 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import project.shop.domain.item.enums.Status;
 import project.shop.global.entity.BaseEntity;
 
 @Entity
@@ -33,5 +34,6 @@ public class Item extends BaseEntity {
     private Integer price;
 
     @Column(name = "status")
-    private String status; // todo: Enum으로 관리
+    @Enumerated(value = EnumType.STRING)
+    private Status status;
 }

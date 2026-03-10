@@ -20,7 +20,7 @@ public class ItemOptionValue extends BaseEntity {
     private Long optionValueId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "option_group_id")
+    @JoinColumn(name = "option_group_id", nullable = false)
     private ItemOptionGroup optionGroup;
 
     @Column(name = "value_name")
