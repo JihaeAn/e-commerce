@@ -16,9 +16,6 @@ export default function ProductInfo({ item }: ProductInfoProps) {
   const [toast, setToast] = useState(false);
   const [errors, setErrors] = useState<Record<string, boolean>>({});
 
-  const colorGroup = item.optionGroups.find((g) => g.name === 'COLOR');
-  const sizeGroup = item.optionGroups.find((g) => g.name === 'SIZE');
-
   const handleSelect = (groupName: string, option: string) => {
     setSelectedOptions((prev) => ({ ...prev, [groupName]: option }));
     setErrors((prev) => ({ ...prev, [groupName]: false }));
@@ -26,8 +23,9 @@ export default function ProductInfo({ item }: ProductInfoProps) {
 
   const handleAdd = () => {
     const newErrors: Record<string, boolean> = {};
-    if (colorGroup && !selectedOptions['COLOR']) newErrors['COLOR'] = true;
-    if (sizeGroup && !selectedOptions['SIZE']) newErrors['SIZE'] = true;
+    item.optionGroups.forEach((g) => {
+      if (!selectedOptions[g.name]) newErrors[g.name] = true;
+    });
     if (Object.keys(newErrors).length) { setErrors(newErrors); return; }
 
     addItem({ itemId: item.id, name: item.name, brandName: item.brandName, price: item.price, imageUrl: item.imageUrl, selectedOptions }, quantity);
@@ -51,29 +49,19 @@ export default function ProductInfo({ item }: ProductInfoProps) {
 
       <p className="text-sm text-gray-600 leading-relaxed">{item.description}</p>
 
-      {colorGroup && (
-        <div>
+      {item.optionGroups.map((group) => (
+        <div key={group.id}>
           <OptionSelector
-            label="Color"
-            options={colorGroup.options}
-            selected={selectedOptions['COLOR'] ?? null}
-            onSelect={(opt) => handleSelect('COLOR', opt)}
+            label={group.name}
+            options={group.options}
+            selected={selectedOptions[group.name] ?? null}
+            onSelect={(opt) => handleSelect(group.name, opt)}
           />
-          {errors['COLOR'] && <p className="mt-1.5 text-xs text-red-500">색상을 선택해주세요.</p>}
+          {errors[group.name] && (
+            <p className="mt-1.5 text-xs text-red-500">{group.name} 옵션을 선택해주세요.</p>
+          )}
         </div>
-      )}
-
-      {sizeGroup && (
-        <div>
-          <OptionSelector
-            label="Size"
-            options={sizeGroup.options}
-            selected={selectedOptions['SIZE'] ?? null}
-            onSelect={(opt) => handleSelect('SIZE', opt)}
-          />
-          {errors['SIZE'] && <p className="mt-1.5 text-xs text-red-500">사이즈를 선택해주세요.</p>}
-        </div>
-      )}
+      ))}
 
       <div>
         <p className="text-xs tracking-widest uppercase text-gray-500 mb-3">Quantity</p>
