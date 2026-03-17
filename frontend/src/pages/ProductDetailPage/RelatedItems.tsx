@@ -1,15 +1,49 @@
-import type { Item } from '../../types/item';
-import { mockItems } from '../../constants/mockItems';
+import { useEffect, useState } from 'react';
+import type { ProductCardData } from '../../types/item';
+import apiClient from '../../api/client';
 import ProductCard from '../../components/product/ProductCard';
 
+const PLACEHOLDER = 'https://placehold.co/400x533/f3f4f6/9ca3af?text=No+Image';
+
 interface RelatedItemsProps {
-  current: Item;
+  currentItemId: number;
+  categoryName: string;
 }
 
-export default function RelatedItems({ current }: RelatedItemsProps) {
-  const related = mockItems
-    .filter((item) => item.id !== current.id && item.category === current.category)
-    .slice(0, 4);
+interface ApiItemCard {
+  itemId: number;
+  itemName: string;
+  categoryName: string | null;
+  price: number;
+  imageUrl: string | null;
+}
+
+export default function RelatedItems({ currentItemId, categoryName }: RelatedItemsProps) {
+  const [related, setRelated] = useState<ProductCardData[]>([]);
+
+  useEffect(() => {
+    if (!categoryName) return;
+
+    apiClient
+      .get<{ content: ApiItemCard[] }>('/api/v1/items', {
+        params: { categoryName, size: 5 },
+      })
+      .then((res) => {
+        const items = res.data.content
+          .filter((item) => item.itemId !== currentItemId)
+          .slice(0, 4)
+          .map((item) => ({
+            id: item.itemId,
+            name: item.itemName,
+            brandName: item.categoryName ?? '',
+            price: item.price,
+            imageUrl: item.imageUrl ?? PLACEHOLDER,
+            category: item.categoryName ?? '',
+          }));
+        setRelated(items);
+      })
+      .catch(() => setRelated([]));
+  }, [currentItemId, categoryName]);
 
   if (related.length === 0) return null;
 
