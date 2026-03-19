@@ -32,7 +32,8 @@ public class S3Service {
      * - fileUrl: 업로드 완료 후 DB에 저장할 실제 접근 URL
      */
     public PresignedUrlResult generatePresignedUrl(String fileName, String contentType) {
-        String key = "items/" + UUID.randomUUID() + "/" + fileName;
+        String ext = fileName.contains(".") ? fileName.substring(fileName.lastIndexOf(".")) : "";
+        String key = "item-images/" + UUID.randomUUID() + ext;
 
         PutObjectRequest putObjectRequest = PutObjectRequest.builder()
                 .bucket(bucket)
