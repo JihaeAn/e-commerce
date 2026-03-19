@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import project.shop.global.entity.BaseEntity;
+import project.shop.item.domain.enums.ImageType;
 
 @Entity
 @Table(name = "TB_ITEM_IMAGE")
@@ -23,8 +24,9 @@ public class ItemImage extends BaseEntity {
     @JoinColumn(name = "item_id", nullable = false)
     private Item item;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "image_type")
-    private String imageType; // todo: enum으로 변경
+    private ImageType imageType;
 
     @Column(name = "file_url")
     private String fileUrl;
@@ -39,11 +41,10 @@ public class ItemImage extends BaseEntity {
     private Boolean isActive;
 
     public static ItemImage create(Item item,
-                                   String imageType,
+                                   ImageType imageType,
                                    String fileUrl,
                                    String originalName,
                                    int sortOrder) {
-        // 필요한 validation 추가
         ItemImage image = new ItemImage();
         image.item = item;
         image.imageType = imageType;

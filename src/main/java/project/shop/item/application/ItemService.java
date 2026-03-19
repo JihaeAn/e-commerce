@@ -6,11 +6,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import project.shop.item.domain.command.CreateItemCommand;
+import project.shop.item.domain.command.CreateItemImageCommand;
 import project.shop.item.domain.command.CreateItemOptionGroupCommand;
 import project.shop.item.domain.command.CreateItemSalePolicyCommand;
 import project.shop.item.domain.entity.Category;
 import project.shop.item.domain.entity.Item;
-import project.shop.item.domain.entity.ItemOptionGroup;
 import project.shop.item.domain.entity.ItemSalePolicy;
 import project.shop.item.domain.enums.Status;
 import project.shop.item.infrastructure.persistence.CategoryRepository;
@@ -37,17 +37,16 @@ public class ItemService {
     @Transactional
     public void saveItem(CreateItemCommand itemCommand,
                          List<CreateItemOptionGroupCommand> groupCommands,
-                         CreateItemSalePolicyCommand policyCommand) {
+                         CreateItemSalePolicyCommand policyCommand,
+                         List<CreateItemImageCommand> imageCommands) {
 
-        Item.validationGroupOptions(groupCommands);
+        Item.validateGroupOptions(groupCommands);
 
         Item item = Item.create(itemCommand);
         itemRepository.save(item);
 
-        groupCommands.forEach(groupCommand ->
-//                item.getOptionGroups().add(ItemOptionGroup.create(item, groupCommand))
-                item.addOptionGroups(groupCommands)
-        );
+        item.addOptionGroups(groupCommands);
+        item.addImages(imageCommands);
 
         ItemSalePolicy policy = ItemSalePolicy.create(item, policyCommand);
         itemSalePolicyRepository.save(policy);

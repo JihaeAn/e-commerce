@@ -36,6 +36,9 @@ public record SaveItem(
         LocalDateTime saleEndAt,
 
         // group & value
-        List<SaveItemOptionGroup> groups
+        List<SaveItemOptionGroup> groups,
+
+        // image
+        List<SaveItemImage> images
 ) {
 }

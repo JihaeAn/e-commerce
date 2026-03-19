@@ -7,6 +7,7 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
 import project.shop.item.application.ItemService;
 import project.shop.item.domain.command.CreateItemCommand;
+import project.shop.item.domain.command.CreateItemImageCommand;
 import project.shop.item.domain.command.CreateItemOptionGroupCommand;
 import project.shop.item.domain.command.CreateItemOptionGroupValueCommand;
 import project.shop.item.domain.command.CreateItemSalePolicyCommand;
@@ -70,6 +71,17 @@ public class ItemController {
                 request.saleEndAt()
         );
 
-        itemService.saveItem(itemCommand, groupCommands, policyCommand);
+        List<CreateItemImageCommand> imageCommands = request.images() == null
+                ? List.of()
+                : request.images().stream()
+                        .map(img -> new CreateItemImageCommand(
+                                img.fileUrl(),
+                                img.originalName(),
+                                img.imageType(),
+                                img.sortOrder()
+                        ))
+                        .toList();
+
+        itemService.saveItem(itemCommand, groupCommands, policyCommand, imageCommands);
     }
 }

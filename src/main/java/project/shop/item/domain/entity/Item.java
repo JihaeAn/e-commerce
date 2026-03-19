@@ -6,16 +6,15 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import project.shop.item.domain.command.CreateItemCommand;
+import project.shop.item.domain.command.CreateItemImageCommand;
 import project.shop.item.domain.command.CreateItemOptionGroupCommand;
 import project.shop.item.domain.command.CreateItemOptionGroupValueCommand;
+import project.shop.item.domain.enums.ImageType;
 import project.shop.item.domain.enums.Status;
 import project.shop.global.entity.BaseEntity;
 
-import org.hibernate.annotations.BatchSize;
-
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Entity
 @Table(name = "TB_ITEM")
@@ -69,8 +68,20 @@ public class Item extends BaseEntity {
         return item;
     }
 
+    public void addImages(List<CreateItemImageCommand> commands) {
+        validateImages(commands);
+        commands.forEach(command ->
+                this.images.add(ItemImage.create(
+                        this,
+                        command.imageType(),
+                        command.fileUrl(),
+                        command.originalName(),
+                        command.sortOrder()))
+        );
+    }
+
     public void addOptionGroups(List<CreateItemOptionGroupCommand> commands) {
-        validationGroupOptions(commands);
+        validateGroupOptions(commands);
         commands.forEach(command ->
                 this.optionGroups.add(ItemOptionGroup.create(this, command))
         );
@@ -89,7 +100,7 @@ public class Item extends BaseEntity {
             throw new IllegalArgumentException("상품 상태는 필수입니다.");
     }
 
-    public static void validationGroupOptions(List<CreateItemOptionGroupCommand> groups) {
+    public static void validateGroupOptions(List<CreateItemOptionGroupCommand> groups) {
         if (groups == null)
             throw new IllegalArgumentException("옵션 그룹 목록은 null일 수 없습니다.");
         for (CreateItemOptionGroupCommand group : groups) {
@@ -110,5 +121,14 @@ public class Item extends BaseEntity {
                     throw new IllegalArgumentException("옵션 값 정렬 순서는 0 이상이어야 합니다.");
             }
         }
+    }
+
+    private static void validateImages(List<CreateItemImageCommand> commands) {
+        if (commands == null || commands.isEmpty())
+            throw new IllegalArgumentException("이미지는 최소 1개 이상이어야 합니다.");
+        boolean hasMain = commands.stream()
+                .anyMatch(c -> c.imageType() == ImageType.MAIN);
+        if (!hasMain)
+            throw new IllegalArgumentException("대표 이미지는 필수입니다.");
     }
 }
