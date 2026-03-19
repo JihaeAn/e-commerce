@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
 
@@ -15,6 +15,13 @@ interface SaveItemOptionGroup {
   values: SaveItemOptionValue[];
 }
 
+interface SaveItemImage {
+  fileUrl: string;
+  originalName: string;
+  imageType: 'MAIN' | 'DETAIL';
+  sortOrder: number;
+}
+
 interface SaveItemPayload {
   categoryId: number;
   itemName: string;
@@ -26,6 +33,7 @@ interface SaveItemPayload {
   saleStartAt: string;
   saleEndAt: string;
   groups: SaveItemOptionGroup[];
+  images: SaveItemImage[];
 }
 
 const CATEGORIES = [
@@ -74,12 +82,81 @@ export default function ItemCreate() {
   });
 
   const [groups, setGroups] = useState<SaveItemOptionGroup[]>([]);
+  const [images, setImages] = useState<SaveItemImage[]>([]);
+  const [uploading, setUploading] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (!success) return;
     const timer = setTimeout(() => navigate('/admin/items'), 2000);
     return () => clearTimeout(timer);
   }, [success, navigate]);
+
+  // ── 이미지 업로드 ──
+  const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(e.target.files ?? []);
+    if (files.length === 0) return;
+
+    setUploading(true);
+    try {
+      const uploaded: SaveItemImage[] = [];
+
+      for (const file of files) {
+        // 1. presigned URL 요청
+        const res = await axios.post<{ uploadUrl: string; fileUrl: string }>(
+          '/admin/v1/images/presigned-url',
+          { fileName: file.name, contentType: file.type },
+        );
+        const { uploadUrl, fileUrl } = res.data;
+
+        // 2. S3에 직접 PUT 업로드 (fetch 사용, Content-Type 헤더 필수)
+        await fetch(uploadUrl, {
+          method: 'PUT',
+          headers: { 'Content-Type': file.type },
+          body: file,
+        });
+
+        // 3. 결과 누적 (첫 번째는 MAIN, 나머지는 DETAIL)
+        const currentTotal = images.length + uploaded.length;
+        uploaded.push({
+          fileUrl,
+          originalName: file.name,
+          imageType: currentTotal === 0 ? 'MAIN' : 'DETAIL',
+          sortOrder: currentTotal + 1,
+        });
+      }
+
+      setImages((prev) => [...prev, ...uploaded]);
+    } catch {
+      setError('이미지 업로드에 실패했습니다. 다시 시도해주세요.');
+    } finally {
+      setUploading(false);
+      // 같은 파일 재선택 허용을 위해 input 초기화
+      if (fileInputRef.current) fileInputRef.current.value = '';
+    }
+  };
+
+  const removeImage = (index: number) => {
+    setImages((prev) => {
+      const next = prev.filter((_, i) => i !== index);
+      // 삭제된 이미지가 MAIN이었으면 첫 번째 이미지를 MAIN으로 승격
+      const wasMain = prev[index].imageType === 'MAIN';
+      return next.map((img, i) => ({
+        ...img,
+        imageType: wasMain ? (i === 0 ? 'MAIN' : 'DETAIL') : img.imageType,
+        sortOrder: i + 1,
+      }));
+    });
+  };
+
+  const setMainImage = (index: number) => {
+    setImages((prev) =>
+      prev.map((img, i) => ({
+        ...img,
+        imageType: i === index ? 'MAIN' : 'DETAIL',
+      })),
+    );
+  };
 
   // ── 옵션 그룹 조작 ──
   const addGroup = () => {
@@ -149,6 +226,7 @@ export default function ItemCreate() {
       groups: groups
           .map((g) => ({ ...g, values: g.values.filter((v) => v.valueName.trim() !== '') }))
           .filter((g) => g.groupName.trim() !== '' && g.values.length > 0),
+      images,
     };
 
     setLoading(true);
@@ -268,6 +346,69 @@ export default function ItemCreate() {
                         placeholder="상품에 대한 설명을 입력하세요"
                         className={`${inputClass} resize-none`}
                     />
+                  </div>
+
+                  {/* 이미지 업로드 */}
+                  <div className="col-span-2">
+                    <label className={labelClass}>상품 이미지</label>
+
+                    {/* 파일 선택 버튼 */}
+                    <div
+                        onClick={() => !uploading && fileInputRef.current?.click()}
+                        className={`border border-dashed border-gray-200 px-4 py-5 text-center cursor-pointer hover:border-black transition-colors ${uploading ? 'opacity-50 cursor-not-allowed' : ''}`}
+                    >
+                      <input
+                          ref={fileInputRef}
+                          type="file"
+                          accept="image/*"
+                          multiple
+                          onChange={handleImageChange}
+                          className="hidden"
+                      />
+                      {uploading ? (
+                          <p className="text-xs text-gray-400">업로드 중...</p>
+                      ) : (
+                          <p className="text-xs text-gray-400">
+                            클릭하여 이미지 선택
+                          </p>
+                      )}
+                    </div>
+
+                    {/* 업로드된 이미지 목록 */}
+                    {images.length > 0 && (
+                        <ul className="mt-2 space-y-1.5">
+                          {images.map((img, i) => (
+                              <li key={i} className="flex items-center justify-between border border-gray-100 px-3 py-2 text-xs">
+                                <div className="flex items-center gap-2 min-w-0">
+                                  <span className="text-gray-400 flex-shrink-0">{img.sortOrder}.</span>
+                                  <span className="truncate text-gray-700">{img.originalName}</span>
+                                  {img.imageType === 'MAIN' ? (
+                                    <span className="flex-shrink-0 px-1.5 py-0.5 text-[10px] tracking-wide border border-black text-black">
+                                      대표 이미지
+                                    </span>
+                                  ) : (
+                                    <button
+                                      type="button"
+                                      onClick={() => setMainImage(i)}
+                                      className="flex-shrink-0 px-1.5 py-0.5 text-[10px] tracking-wide border border-gray-300 text-gray-400 hover:border-black hover:text-black transition-colors"
+                                    >
+                                      대표로 설정
+                                    </button>
+                                  )}
+                                </div>
+                                <button
+                                    type="button"
+                                    onClick={() => removeImage(i)}
+                                    className="text-gray-300 hover:text-red-500 transition-colors flex-shrink-0 ml-3"
+                                >
+                                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-3.5 h-3.5">
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" />
+                                  </svg>
+                                </button>
+                              </li>
+                          ))}
+                        </ul>
+                    )}
                   </div>
                 </div>
               </section>
@@ -466,11 +607,15 @@ export default function ItemCreate() {
                     <span>옵션 그룹</span>
                     <span className="text-black">{groups.length}개</span>
                   </div>
+                  <div className="flex justify-between text-gray-500">
+                    <span>이미지</span>
+                    <span className="text-black">{images.length}장</span>
+                  </div>
                 </div>
 
                 <button
                     type="submit"
-                    disabled={loading}
+                    disabled={loading || uploading}
                     className="w-full bg-black text-white py-3 text-xs tracking-widest uppercase hover:bg-neutral-800 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {loading ? '등록 중...' : '상품 등록'}

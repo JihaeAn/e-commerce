@@ -16,17 +16,26 @@ interface ApiOptionGroup {
   optionValues: string[];
 }
 
+interface ApiImage {
+  fileUrl: string;
+  imageType: 'MAIN' | 'DETAIL';
+  sortOrder: number;
+}
+
 interface ApiItemDetail {
   itemId: number;
   itemName: string;
   categoryName: string | null;
   description: string | null;
   price: number;
-  imageUrl: string | null;
+  imageUrls: ApiImage[];
   optionGroups: ApiOptionGroup[];
 }
 
 function toItem(data: ApiItemDetail): Item {
+  const images = [...data.imageUrls].sort((a, b) => a.sortOrder - b.sortOrder);
+  const mainImage = images.find((img) => img.imageType === 'MAIN');
+
   const optionGroups: ItemOptionGroup[] = data.optionGroups.map((g) => ({
     id: g.optionGroupId,
     name: g.groupName,
@@ -40,7 +49,8 @@ function toItem(data: ApiItemDetail): Item {
     price: data.price,
     description: data.description ?? '',
     status: 'AVAILABLE',
-    imageUrl: data.imageUrl ?? PLACEHOLDER,
+    imageUrl: mainImage?.fileUrl ?? images[0]?.fileUrl ?? PLACEHOLDER,
+    images,
     optionGroups,
     category: data.categoryName ?? '',
   };
@@ -91,7 +101,7 @@ export default function ProductDetailPage() {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20">
-        <ProductImages imageUrl={item.imageUrl} name={item.name} id={item.id} />
+        <ProductImages images={item.images} name={item.name} placeholder={PLACEHOLDER} />
         <ProductInfo item={item} />
       </div>
 
