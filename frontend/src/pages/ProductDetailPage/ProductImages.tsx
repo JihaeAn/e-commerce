@@ -1,18 +1,14 @@
 import { useState } from 'react';
+import type { ItemImage } from '../../types/item';
 
 interface ProductImagesProps {
-  imageUrl: string;
+  images: ItemImage[];
   name: string;
-  id: number;
+  placeholder: string;
 }
 
-export default function ProductImages({ imageUrl, name, id }: ProductImagesProps) {
-  const thumbnails = [
-    imageUrl,
-    `https://picsum.photos/seed/item-${id}-b/600/800`,
-    `https://picsum.photos/seed/item-${id}-c/600/800`,
-    `https://picsum.photos/seed/item-${id}-d/600/800`,
-  ];
+export default function ProductImages({ images, name, placeholder }: ProductImagesProps) {
+  const thumbnails = images.length > 0 ? images.map((img) => img.fileUrl) : [placeholder];
 
   const [selected, setSelected] = useState(0);
 

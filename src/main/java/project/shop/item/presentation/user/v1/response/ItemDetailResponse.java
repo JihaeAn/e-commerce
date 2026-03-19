@@ -10,24 +10,22 @@ public record ItemDetailResponse(
         String categoryName,
         String description,
         Integer price,
-        String imageUrl,
-        List<OptionGroupDto> optionGroups
+        List<ItemImageResponse> imageUrls,
+        List<ItemOptionGroupResponse> optionGroups
 ) {
-    public record OptionGroupDto(
-            Long optionGroupId,
-            String groupName,
-            List<String> optionValues
-    ) {}
 
     public static ItemDetailResponse from(Item item, String categoryName) {
-        String imageUrl = item.getImages().stream()
-                .filter(img -> Boolean.TRUE.equals(img.getIsActive()))
-                .min((a, b) -> Integer.compare(a.getSortOrder(), b.getSortOrder()))
-                .map(img -> img.getFileUrl())
-                .orElse(null);
+        List<ItemImageResponse> imageUrls = item.getImages().stream()
+                .filter(image -> Boolean.TRUE.equals(image.getIsActive()))
+                .map(image -> new ItemImageResponse(
+                        image.getFileUrl(),
+                        image.getImageType().toString(),
+                        image.getSortOrder()
+                ))
+                .toList();
 
-        List<OptionGroupDto> optionGroups = item.getOptionGroups().stream()
-                .map(g -> new OptionGroupDto(
+        List<ItemOptionGroupResponse> optionGroups = item.getOptionGroups().stream()
+                .map(g -> new ItemOptionGroupResponse(
                         g.getOptionGroupId(),
                         g.getGroupName(),
                         g.getValues().stream()
@@ -42,7 +40,7 @@ public record ItemDetailResponse(
                 categoryName,
                 item.getDescription(),
                 item.getPrice(),
-                imageUrl,
+                imageUrls,
                 optionGroups
         );
     }

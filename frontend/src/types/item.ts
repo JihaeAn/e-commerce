@@ -1,5 +1,11 @@
 export type ItemStatus = 'AVAILABLE' | 'OUT_OF_STOCK' | 'DISCONTINUED';
 
+export interface ItemImage {
+  fileUrl: string;
+  imageType: 'MAIN' | 'DETAIL';
+  sortOrder: number;
+}
+
 export interface ItemOptionGroup {
   id: number;
   name: string; // e.g. "COLOR", "SIZE"
@@ -14,6 +20,7 @@ export interface Item {
   description: string;
   status: ItemStatus;
   imageUrl: string;
+  images: ItemImage[];
   optionGroups: ItemOptionGroup[];
   category: string;
 }
