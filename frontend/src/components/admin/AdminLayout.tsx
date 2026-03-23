@@ -41,7 +41,7 @@ export default function AdminLayout() {
         {/* Logo */}
         <div className="h-16 flex items-center px-6 border-b border-neutral-800">
           <Link to="/admin" className="text-sm font-bold tracking-[0.2em] uppercase">
-            SURFACE
+            MUSINSA
           </Link>
           <span className="ml-2 text-[9px] tracking-widest uppercase text-neutral-500 mt-0.5">
             Admin
@@ -91,7 +91,7 @@ export default function AdminLayout() {
           <div className="flex items-center gap-3">
             <div className="text-right">
               <p className="text-sm font-medium">관리자</p>
-              <p className="text-xs text-gray-400">admin@surface.com</p>
+              <p className="text-xs text-gray-400">ajh6615@musinsa.com</p>
             </div>
             <div className="w-8 h-8 rounded-full bg-black text-white flex items-center justify-center text-xs font-bold">
               A

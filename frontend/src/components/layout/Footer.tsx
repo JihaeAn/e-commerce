@@ -5,7 +5,7 @@ const FOOTER_COLS = [
   },
   {
     title: 'COMPANY',
-    links: ['About SURFACE', 'Sustainability', 'Press', 'Careers'],
+    links: ['About MUSINSA', 'Sustainability', 'Press', 'Careers'],
   },
   {
     title: 'HELP',
@@ -42,9 +42,9 @@ export default function Footer() {
         </div>
 
         <div className="pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
-          <span className="text-xl font-bold tracking-[0.3em] uppercase">SURFACE</span>
+          <span className="text-xl font-bold tracking-[0.3em] uppercase">MUSINSA</span>
           <p className="text-xs text-gray-500">
-            © {new Date().getFullYear()} SURFACE. All rights reserved.
+            © {new Date().getFullYear()} MUSINSA. All rights reserved.
           </p>
         </div>
       </div>

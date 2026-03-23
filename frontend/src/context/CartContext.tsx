@@ -24,7 +24,7 @@ interface CartContextValue {
 
 const CartContext = createContext<CartContextValue | null>(null);
 
-const STORAGE_KEY = 'surface_cart';
+const STORAGE_KEY = 'musinsa_cart';
 
 function makeCartKey(itemId: number, selectedOptions: Record<string, string>) {
   const optStr = Object.entries(selectedOptions)

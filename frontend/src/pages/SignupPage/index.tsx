@@ -75,19 +75,19 @@ export default function SignupPage() {
           </p>
         </div>
         <Link to="/" className="absolute top-8 left-8 font-display text-xl font-semibold tracking-[0.15em] uppercase text-parchment-50">
-          Surface
+          Musinsa
         </Link>
       </div>
 
       {/* Right — form */}
       <div className="bg-white flex flex-col justify-center px-8 sm:px-16 lg:px-20 py-16 overflow-y-auto">
         <Link to="/" className="lg:hidden font-display text-xl font-semibold tracking-[0.15em] uppercase text-warm-900 mb-14 self-start">
-          Surface
+          Musinsa
         </Link>
 
         <div className="max-w-sm w-full mx-auto lg:mx-0">
           <h1 className="font-display text-3xl font-medium text-warm-900 mb-1">Create account</h1>
-          <p className="text-sm text-warm-400 mb-10">SURFACE 멤버가 되어보세요</p>
+          <p className="text-sm text-warm-400 mb-10">MUSINSA 회원이 되어보세요</p>
 
           <form onSubmit={submit} className="space-y-6">
             <Field label="이름" value={form.name} onChange={set('name')} placeholder="홍길동" error={errors.name} autoComplete="name" />

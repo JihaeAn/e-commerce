@@ -15,7 +15,7 @@ export default function Dashboard() {
     <div>
       <div className="mb-8">
         <h1 className="text-2xl font-bold tracking-tight">대시보드</h1>
-        <p className="text-sm text-gray-400 mt-1">SURFACE 관리자 페이지</p>
+        <p className="text-sm text-gray-400 mt-1">MUSINSA 관리자 페이지</p>
       </div>
 
       {/* Stats */}
