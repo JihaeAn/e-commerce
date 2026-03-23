@@ -25,7 +25,7 @@ export default function Header() {
         <div className="max-w-screen-xl mx-auto px-6 h-16 flex items-center justify-between">
           {/* Logo */}
           <Link to="/" className="text-xl font-bold tracking-[0.3em] uppercase select-none">
-            SURFACE
+            MUSINSA
           </Link>
 
           {/* Nav */}

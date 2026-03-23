@@ -2,7 +2,7 @@ export default function CollectionBanner() {
   return (
     <section className="relative overflow-hidden" style={{ height: '480px' }}>
       <img
-        src="https://picsum.photos/seed/surface-collection/1600/700"
+        src="https://picsum.photos/seed/musinsa-collection/1600/700"
         alt="Collection"
         className="absolute inset-0 w-full h-full object-cover"
       />
