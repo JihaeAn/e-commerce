@@ -1,6 +1,8 @@
 package project.shop.item.presentation.user.v1.response;
 
 import project.shop.item.domain.entity.Item;
+import project.shop.item.domain.entity.ItemOptionValue;
+import project.shop.item.domain.entity.ItemSalePolicy;
 
 import java.util.List;
 
@@ -10,6 +12,8 @@ public record ItemDetailResponse(
         String categoryName,
         String description,
         Integer price,
+        Integer salePrice,
+        Integer discountRate,
         List<ItemImageResponse> imageUrls,
         List<ItemOptionGroupResponse> optionGroups
 ) {
@@ -25,14 +29,20 @@ public record ItemDetailResponse(
                 .toList();
 
         List<ItemOptionGroupResponse> optionGroups = item.getOptionGroups().stream()
-                .map(g -> new ItemOptionGroupResponse(
-                        g.getOptionGroupId(),
-                        g.getGroupName(),
-                        g.getValues().stream()
-                                .map(v -> v.getValueName())
+                .map(group -> new ItemOptionGroupResponse(
+                        group.getOptionGroupId(),
+                        group.getGroupName(),
+                        group.getValues().stream()
+                                .map(ItemOptionValue::getValueName)
                                 .toList()
                 ))
                 .toList();
+
+        ItemSalePolicy policy = item.getSalePolicies().stream()
+                .filter(ItemSalePolicy::getIsActive)
+                .findFirst()
+                .orElse(null);
+
 
         return new ItemDetailResponse(
                 item.getItemId(),
@@ -40,6 +50,8 @@ public record ItemDetailResponse(
                 categoryName,
                 item.getDescription(),
                 item.getPrice(),
+                policy.getSalePrice(),
+                policy.getSalePercent(),
                 imageUrls,
                 optionGroups
         );

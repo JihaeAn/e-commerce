@@ -51,6 +51,7 @@ public class ItemSalePolicy extends BaseEntity {
     private Boolean isActive;
 
     public static ItemSalePolicy create(Item item, CreateItemSalePolicyCommand command) {
+        // 상품을 최초로 등록할 땐 제외지만, 정책의 날짜가 겹쳐서는 안된다는 점을 고려하자.
 
         ItemSalePolicy policy = new ItemSalePolicy();
         policy.item = item;

@@ -9,6 +9,8 @@ export const mockItems: Item[] = [
     description:
       'Relaxed-fit linen blazer with a clean minimal silhouette. Unlined for a lightweight feel.',
     status: 'AVAILABLE',
+    salePrice: null,
+    discountRate: null,
     imageUrl: 'https://picsum.photos/seed/item-1/600/800',
     images: [{ fileUrl: 'https://picsum.photos/seed/item-1/600/800', imageType: 'MAIN', sortOrder: 1 }],
     category: 'OUTER',
@@ -25,6 +27,8 @@ export const mockItems: Item[] = [
     description:
       'High-rise wide-leg trousers crafted from a crisp cotton-blend fabric.',
     status: 'AVAILABLE',
+    salePrice: null,
+    discountRate: null,
     imageUrl: 'https://picsum.photos/seed/item-2/600/800',
     images: [{ fileUrl: 'https://picsum.photos/seed/item-2/600/800', imageType: 'MAIN', sortOrder: 1 }],
     category: 'BOTTOMS',
@@ -41,6 +45,8 @@ export const mockItems: Item[] = [
     description:
       'Slim-fit turtleneck in a fine-gauge rib-knit. Versatile everyday essential.',
     status: 'AVAILABLE',
+    salePrice: null,
+    discountRate: null,
     imageUrl: 'https://picsum.photos/seed/item-3/600/800',
     images: [{ fileUrl: 'https://picsum.photos/seed/item-3/600/800', imageType: 'MAIN', sortOrder: 1 }],
     category: 'TOPS',
@@ -56,6 +62,8 @@ export const mockItems: Item[] = [
     price: 89000,
     description: 'Sturdy canvas tote with a debossed logo. Daily-use companion.',
     status: 'AVAILABLE',
+    salePrice: null,
+    discountRate: null,
     imageUrl: 'https://picsum.photos/seed/item-4/600/800',
     images: [{ fileUrl: 'https://picsum.photos/seed/item-4/600/800', imageType: 'MAIN', sortOrder: 1 }],
     category: 'BAGS',
@@ -71,6 +79,8 @@ export const mockItems: Item[] = [
     description:
       'Classic straight-fit jeans in a rigid indigo denim. Made to last.',
     status: 'AVAILABLE',
+    salePrice: null,
+    discountRate: null,
     imageUrl: 'https://picsum.photos/seed/item-5/600/800',
     images: [{ fileUrl: 'https://picsum.photos/seed/item-5/600/800', imageType: 'MAIN', sortOrder: 1 }],
     category: 'BOTTOMS',
@@ -87,6 +97,8 @@ export const mockItems: Item[] = [
     description:
       'Oversized cocoon coat in a soft wool-cashmere blend. Statement outer piece.',
     status: 'AVAILABLE',
+    salePrice: null,
+    discountRate: null,
     imageUrl: 'https://picsum.photos/seed/item-6/600/800',
     images: [{ fileUrl: 'https://picsum.photos/seed/item-6/600/800', imageType: 'MAIN', sortOrder: 1 }],
     category: 'OUTER',
@@ -103,6 +115,8 @@ export const mockItems: Item[] = [
     description:
       'Fluid satin-finish slip dress. Minimalist cut with adjustable straps.',
     status: 'AVAILABLE',
+    salePrice: null,
+    discountRate: null,
     imageUrl: 'https://picsum.photos/seed/item-7/600/800',
     images: [{ fileUrl: 'https://picsum.photos/seed/item-7/600/800', imageType: 'MAIN', sortOrder: 1 }],
     category: 'DRESSES',
@@ -119,6 +133,8 @@ export const mockItems: Item[] = [
     description:
       'Full-grain leather belt with a matte rectangular buckle.',
     status: 'AVAILABLE',
+    salePrice: null,
+    discountRate: null,
     imageUrl: 'https://picsum.photos/seed/item-8/600/800',
     images: [{ fileUrl: 'https://picsum.photos/seed/item-8/600/800', imageType: 'MAIN', sortOrder: 1 }],
     category: 'ACCESSORIES',

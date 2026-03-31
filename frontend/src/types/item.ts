@@ -17,6 +17,8 @@ export interface Item {
   name: string;
   brandName: string;
   price: number;
+  salePrice: number | null;
+  discountRate: number | null;
   description: string;
   status: ItemStatus;
   imageUrl: string;

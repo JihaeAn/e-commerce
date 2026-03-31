@@ -44,7 +44,24 @@ export default function ProductInfo({ item }: ProductInfoProps) {
       <div>
         <p className="text-xs tracking-widest uppercase text-gray-400 mb-2">{item.brandName}</p>
         <h1 className="text-3xl font-bold tracking-tight mb-3">{item.name}</h1>
-        <p className="text-xl font-medium">{item.price.toLocaleString('ko-KR')}원</p>
+
+        {item.salePrice != null && item.discountRate != null ? (
+          <div className="space-y-1">
+              <p className="text-ml text-gray-400 line-through">
+                  {item.price.toLocaleString('ko-KR')}원
+              </p>
+            <div className="flex items-center gap-2">
+              <span className="text-2xl font-bold text-red-500">
+                {item.discountRate}%
+              </span>
+              <span className="text-2xl font-bold">
+                {item.salePrice.toLocaleString('ko-KR')}원
+              </span>
+            </div>
+          </div>
+        ) : (
+          <p className="text-xl font-medium">{item.price.toLocaleString('ko-KR')}원</p>
+        )}
       </div>
 
       <p className="text-sm text-gray-600 leading-relaxed">{item.description}</p>
