@@ -29,13 +29,13 @@ export default function LoginPage() {
     <div className="min-h-screen bg-white flex flex-col">
       {/* Header */}
       <header className="flex items-center justify-between px-6 py-5 border-b border-neutral-100">
-        <Link to="/" className="text-[11px] tracking-[0.2em] text-neutral-400 hover:text-black transition-colors">
+        <Link to="/" className="text-[13px] tracking-[0.2em] text-neutral-400 hover:text-black transition-colors">
           홈
         </Link>
         <Link to="/" className="text-[22px] font-bold tracking-[0.18em] uppercase text-black">
           Musinsa
         </Link>
-        <Link to="/signup" className="text-[11px] tracking-[0.2em] text-neutral-400 hover:text-black transition-colors">
+        <Link to="/signup" className="text-[13px] tracking-[0.2em] text-neutral-400 hover:text-black transition-colors">
           회원가입
         </Link>
       </header>
@@ -44,7 +44,7 @@ export default function LoginPage() {
       <div className="flex-1 flex items-center justify-center px-4 py-16">
         <div className="w-full max-w-[400px]">
 
-          <h1 className="text-[13px] font-bold tracking-[0.3em] uppercase text-black text-center mb-10">
+          <h1 className="text-[19px] font-bold tracking-[0.3em] uppercase text-black text-center mb-10">
             로그인
           </h1>
 
@@ -73,7 +73,7 @@ export default function LoginPage() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-black text-white py-4 text-[12px] tracking-[0.25em] uppercase font-medium hover:bg-neutral-800 transition-colors disabled:opacity-40 disabled:cursor-not-allowed mt-1"
+              className="w-full bg-black text-white py-4 text-[14px] tracking-[0.25em] uppercase font-medium hover:bg-neutral-800 transition-colors disabled:opacity-40 disabled:cursor-not-allowed mt-1"
             >
               {loading ? '로그인 중...' : '로그인'}
             </button>
@@ -81,15 +81,15 @@ export default function LoginPage() {
 
           {/* Links */}
           <div className="flex items-center justify-center gap-5 mt-5">
-            <a href="#" className="text-[11px] text-neutral-400 hover:text-black transition-colors">
+            <a href="#" className="text-[12px] text-neutral-400 hover:text-black transition-colors">
               아이디 찾기
             </a>
             <span className="w-px h-3 bg-neutral-200" />
-            <a href="#" className="text-[11px] text-neutral-400 hover:text-black transition-colors">
+            <a href="#" className="text-[12px] text-neutral-400 hover:text-black transition-colors">
               비밀번호 찾기
             </a>
             <span className="w-px h-3 bg-neutral-200" />
-            <Link to="/signup" className="text-[11px] text-neutral-400 hover:text-black transition-colors">
+            <Link to="/signup" className="text-[12px] text-neutral-400 hover:text-black transition-colors">
               회원가입
             </Link>
           </div>
@@ -97,7 +97,7 @@ export default function LoginPage() {
           {/* Divider */}
           <div className="flex items-center gap-4 my-8">
             <div className="flex-1 h-px bg-neutral-100" />
-            <span className="text-[10px] tracking-[0.25em] uppercase text-neutral-300">SNS 로그인</span>
+            <span className="text-[12px] tracking-[0.25em] uppercase text-neutral-300">SNS 로그인</span>
             <div className="flex-1 h-px bg-neutral-100" />
           </div>
 

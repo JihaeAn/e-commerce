@@ -28,6 +28,8 @@ interface ApiItemDetail {
   categoryName: string | null;
   description: string | null;
   price: number;
+  salePrice: number | null;
+  discountRate: number | null;
   imageUrls: ApiImage[];
   optionGroups: ApiOptionGroup[];
 }
@@ -47,6 +49,8 @@ function toItem(data: ApiItemDetail): Item {
     name: data.itemName,
     brandName: data.categoryName ?? '',
     price: data.price,
+    salePrice: data.salePrice ?? null,
+    discountRate: data.discountRate ?? null,
     description: data.description ?? '',
     status: 'AVAILABLE',
     imageUrl: mainImage?.fileUrl ?? images[0]?.fileUrl ?? PLACEHOLDER,
